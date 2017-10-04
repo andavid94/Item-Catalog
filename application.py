@@ -260,71 +260,12 @@ def showItem(category_name, item_name):
 								categories = categories, item = item, creator = creator)
 
 
-# Create new category
-@app.route('/catalog/newcategory/', methods = ['GET', 'POST'])
-def addCategory():
-	if 'username' not in login_session:
-		return redirect('/login')
-	if request.method == 'POST':
-		newCategory = Category(
-			name = request.form['name'], user_id = login_session.get('user_id'))
-		session.add(newCategory)
-		session.commit()
-		flash('New Category Successfully Created')
-		return redirect(url_for('showCatalog'))
-	else:
-		return render_template('addcategory.html')
-
-
-# Edit an existing category
-@app.route('/catalog/<path:category_name>/edit/', methods = ['GET', 'POST'])
-def editCategory(category_name):
-	category = session.query(Category).filter_by(name = category_name).one()
-	editedCategory = session.query(Category).filter_by(name = category_name).one()
-	creator = getUserInfo(editedCategory.user_id)
-	user = getUserInfo(login_session).get('user_id')
-
-	if login_session.get('user_id') != creator.id:
-		flash('You are unable to edit this Category since you are not the creator')
-		return redirect(url_for('showCatalog'))
-	if request.method == 'POST':
-		if request.form['name']:
-			editedCategory.name = request.form['name']
-		session.add(editedCategory)
-		session.commit()
-		flash('Category has been successfully edited.')
-		return redirect(url_for('showCatalog'))
-	else:
-		return render_template('editcategory.html', categories = editedCategory,
-								category = category)
-
-
-# Delete an existing category
-@app.route('/catalog/<path:category_name>/delete', methods = ['GET', 'POST'])
-def deleteCategory(category_name):
-	categoryToDelete = session.query(
-			Category).filter_by(name = category_name).one()
-	creator = getUserInfo(categoryToDelete.user_id)
-	user = getUserInfo(login_session.get('user_id'))
-
-	if login_session.get('user_id') != creator.id:
-		flash('You cannot delete this Cateogry since you are not the creator')
-		return redirect(url_for('showCatalog'))
-	if request.method == 'POST':
-		session.delete(categoryToDelete)
-		session.commit()
-		flash ('Category has been successfully deleted.')
-		return redirect(url_for('showCatalog'))
-	else:
-		return render_template('deletecategory.html', category = categoryToDelete)
-
-
 # Create a new Item
 @app.route('/catalog/add/', methods = ['GET', 'POST'])
 def addItem():
 	categories = session.query(Category).all()
 	if request.method == 'POST':
-		newItem = Items(name = request.form['name'], 
+		newItem = Items(name = request.form['name'], picture = request.form['picture'],
 			description = request.form['description'], date = datetime.datetime.now(), 
 			category = session.query(Category).
 			filter_by(name = request.form['category']).one(), user_id = login_session.get('user_id'))
@@ -342,13 +283,15 @@ def editItem(category_name, item_name):
 	categories = session.query(Category).all()
 	editedItem = session.query(Items).filter_by(name = item_name).one()
 	creator = getUserInfo(editedItem.user_id)
-	user = getUserInfo(login_session.get('user_info'))
-	if login_session.get('user_info') != creator.id:
+	user = getUserInfo(login_session.get('user_id'))
+	if login_session.get('user_id') != creator.id:
 		flash('You cannot edit this item since you are not the creator')
 		return redirect(url_for('showCatalog'))
 	if request.method == 'POST':
 		if request.form['name']:
 			editedItem.name = request.form['name']
+		if request.form['picture']:
+			editedItem.picture = request.form['picture']
 		if request.form['description']:
 			editedItem.description = request.form['description']
 		if request.form['category']:
@@ -374,8 +317,8 @@ def deleteItem(category_name, item_name):
 	categories = session.query(Category).all()
 	category = session.query(Category).filter_by(name = category_name).one()
 	creator = getUserInfo(itemToDelete.user_id)
-	user = getUserInfo(login_session.get('user_info'))
-	if login_session.get('user_info') != creator.id:
+	user = getUserInfo(login_session.get('user_id'))
+	if login_session.get('user_id') != creator.id:
 		flash('You cannot delete this item since you are not the creator')
 		return redirect(url_for(showCatalog))
 	if request.method == 'POST':
@@ -408,18 +351,3 @@ if __name__ == '__main__':
 	app.secret_key = 'super_secret_key'
 	app.debug = True
 	app.run(host = '0.0.0.0', port = 8000)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

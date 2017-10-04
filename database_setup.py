@@ -24,7 +24,7 @@ class Category(Base):
 	name = Column(String(250), nullable = False)
 	user_id = Column(Integer, ForeignKey('user.id'))
 	user = relationship(User)
-	items = relationship('Items', cascade = 'all, delete-orphan')
+	items = relationship('Items')
 
 
 	@property
@@ -42,6 +42,7 @@ class Items(Base):
 	id = Column(Integer, primary_key = True)
 	name = Column(String(250), nullable = False)
 	description = Column(String(250))
+	picture = Column(String(250))
 	date = Column(DateTime, nullable = False)
 	category_id = Column(Integer, ForeignKey('category.id'))
 	category = relationship(Category)
@@ -54,6 +55,7 @@ class Items(Base):
 		return {
 			'name': self.name,
 			'description': self.description,
+			'picture': self.picture,
 			'id': self.id,
 			'category': self.category,
 		}
@@ -63,3 +65,4 @@ engine = create_engine('sqlite:///itemcatalog.db')
 
 
 Base.metadata.create_all(engine)
+

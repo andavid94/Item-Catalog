@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, Items, User
+from database_setup import Base, Region, Cities, User
 import datetime
 
-engine = create_engine('sqlite:///itemcatalog.db')
+engine = create_engine('sqlite:///travelDocument.db')
 # Bind the engine to the metadata of the Base class so that the
 # declaratives can be accessed through a DBSession instance
 Base.metadata.bind = engine
@@ -28,70 +28,72 @@ session.add(User1)
 session.commit()
 
 
-# Create category for areas in the Pacific Northwest
-Category1 = Category(name = "Pacific Northwest", user_id = 1)
-session.add(Category1)
+# Create region for cities in the Pacific Northwest
+Region1 = Region(name = "Pacific Northwest", user_id = 1)
+session.add(Region1)
 session.commit()
 
-Item1 = Items(
+City1 = Cities(
 		name = "Seattle, WA",
 		picture = "https://cdn.vox-cdn.com/uploads/chorus_image/image/53737065/eatersea0317_seattle_shutterstock.0.jpg",
 		description = "Seattle is the largest city in the Pacific Northwest region of the United States. It is located in the U.S. state of Washington, about 108 miles (180 km) south of the American-Canadian border. ... Its official nickname is the Emerald City.",
 		date = datetime.datetime.utcnow(),
-		category_id = 1, 
+		region_id = 1, 
 		user_id = 1)
-session.add(Item1)
-session.commit()
-
-Item2 = Items(
-		name = "Portland, OR",
-		picture = "https://www.visittheusa.com/sites/default/files/styles/hero_m_1300x700/public/images/hero_media_image/2016-11/Drone.__72%20DPI.jpg?itok=jhGikGPz",
-		description = "This climate is ideal for growing roses, and Portland has been called the City of Roses for over a century. Keep Portland Weird is an unofficial slogan for the city.",
-		date = datetime.datetime.utcnow(),
-		category_id = 1,
-		user_id = 1)
-session.add(Item2)
+session.add(City1)
 session.commit()
 
 
-# Create category for areas in California
-Category2 = Category(name = "Southwest", user_id = 1)
-session.add(Category2)
+# Create region for cities in California
+Region2 = Region(name = "Southwest", user_id = 1)
+session.add(Region2)
 session.commit()
 
-Item3 = Items(
-		name = "San Diego",
+City2 = Cities(
+		name = "San Diego, CA",
 		picture = "http://www.hotelpalomar-sandiego.com/images/tout/kimpton-hotel-palomar-san-diego-pier-b6a08a84.jpg",
 		description = "Beautiful weather year-round, and an excellent place to vacation if you are a surfer or enjoy eating good mexican food.",
 		date = datetime.datetime.utcnow(),
-		category_id = 2,
+		region_id = 2,
 		user_id = 1)
-session.add(Item3)
+session.add(City2)
 session.commit()
 
 
-# Create category for travel destinations
-Category3 = Category(name = "Midwest", user_id = 1)
-session.add(Category3)
+# Create region for cities in the midwest
+Region3 = Region(name = "Midwest", user_id = 1)
+session.add(Region3)
 session.commit()
 
 
-# Create category for musical artists
-Category4 = Category(name = "Hawaiian islands", user_id = 1)
-session.add(Category4)
+Region4 = Region(name = "Hawaiian islands", user_id = 1)
+session.add(Region4)
 session.commit()
 
-Category5 = Category(name = "Northeast", user_id = 1)
-session.add(Category5)
-session.commit()
-
-Category6 = Category(name = "Southeast", user_id = 1)
-session.add(Category6)
-session.commit()
-
-Category7 = Category(name = "Alaska", user_id = 1)
-session.add(Category7)
+City3 = Cities(
+	name = "Kailua, HI",
+	picture = "http://images.kuoni.co.uk/73/hawaii-40591419-1483623557-ImageGalleryLightboxLarge.jpg",
+	description = "Kailua is a place of much natural beauty. The most significant features of Kailua are the bay, the mountains, and the wetlands.  Kailua Bay is a magnificent place symbolizing the regional quality of the community.  Kailua Beach and nearby Lanikai have been on the Worlds Best Beach lists by several publishers for many years.",
+	date = datetime.datetime.utcnow(),
+	region_id = 4,
+	user_id = 1)
+session.add(City3)
 session.commit()
 
 
-print "added category and item information to database"
+Region5 = Region(name = "Northeast", user_id = 1)
+session.add(Region5)
+session.commit()
+
+
+Region6 = Region(name = "Southeast", user_id = 1)
+session.add(Region6)
+session.commit()
+
+
+Region7 = Region(name = "Alaska", user_id = 1)
+session.add(Region7)
+session.commit()
+
+
+print "added region and city information to database"

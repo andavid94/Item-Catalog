@@ -17,14 +17,14 @@ class User(Base):
 	picture = Column(String(250))
 
 
-class Category(Base):
-	__tablename__ = 'category'
+class Region(Base):
+	__tablename__ = 'region'
 
 	id = Column(Integer, primary_key = True)
 	name = Column(String(250), nullable = False)
 	user_id = Column(Integer, ForeignKey('user.id'))
 	user = relationship(User)
-	items = relationship('Items')
+	cities = relationship('Cities')
 
 
 	@property
@@ -36,16 +36,16 @@ class Category(Base):
 		}
 
 
-class Items(Base):
-	__tablename__ = 'items'
+class Cities(Base):
+	__tablename__ = 'cities'
 
 	id = Column(Integer, primary_key = True)
 	name = Column(String(250), nullable = False)
 	description = Column(String(250))
 	picture = Column(String(250))
 	date = Column(DateTime, nullable = False)
-	category_id = Column(Integer, ForeignKey('category.id'))
-	category = relationship(Category)
+	region_id = Column(Integer, ForeignKey('region.id'))
+	region = relationship(Region)
 	user_id = Column(Integer, ForeignKey('user.id'))
 	user = relationship(User)
 
@@ -57,12 +57,11 @@ class Items(Base):
 			'description': self.description,
 			'picture': self.picture,
 			'id': self.id,
-			'category': self.category,
+			'region': self.region,
 		}
 
 
-engine = create_engine('sqlite:///itemcatalog.db')
+engine = create_engine('sqlite:///travelDocument.db')
 
 
 Base.metadata.create_all(engine)
-
